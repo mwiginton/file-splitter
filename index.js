@@ -24,7 +24,6 @@ async function fileSplitter(processedJson) {
     let startingPoint = 0;
     let linesWritten = 0;
     const chunkSize = 5000;
-    const fileList = [];
     console.log(processedJson.length);
 
     // this reprenents the number of files the original file will be broken into
@@ -45,8 +44,7 @@ async function fileSplitter(processedJson) {
                 // if we've reached the chunk increment, increase the starting point to the next increment
                 if (j == startingPoint + chunkSize - 1) {
                     startingPoint = j + 1;
-                    // need to retain a list of files for deletion later
-                    fileList.push('file-'+ i +'.csv');
+
                     // file chunk to be written
                     const writeStream = await fs.createWriteStream('file-'+ i +'.csv');
                     const options = {headers: true};
@@ -68,7 +66,6 @@ async function fileSplitter(processedJson) {
         }
     }
     console.log('File split complete ...');
-    return fileList;
 }
 
 async function driver() {
