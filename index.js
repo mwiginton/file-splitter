@@ -2,8 +2,6 @@ const fs = require('fs');
 const csv = require('csv-parser');
 const fastcsv = require('fast-csv');
 
-const chunkSize = 5000;
-
 async function createList() {
     const processedJson = [];
     const csvToJsonParsing = new Promise(function(resolve, reject) {
@@ -25,6 +23,7 @@ async function fileSplitter(processedJson) {
     console.log('Splitting original file...');
     let startingPoint = 0;
     let linesWritten = 0;
+    const chunkSize = 5000;
     const fileList = [];
     console.log(processedJson.length);
 
@@ -39,13 +38,13 @@ async function fileSplitter(processedJson) {
         // the data that will get written into the current smaller file
         const jsonChunk = [];
 
-        for (let j = startingPoint; j <= startingPoint + chunkSize; j++) {
+        for (let j = startingPoint; j < startingPoint + chunkSize; j++) {
             jsonChunk.push(processedJson[j]);
             if (j < processedJson.length) {
                 linesWritten++;
                 // if we've reached the chunk increment, increase the starting point to the next increment
-                if (j == startingPoint + chunkSize) {
-                    startingPoint = j;
+                if (j == startingPoint + chunkSize - 1) {
+                    startingPoint = j + 1;
                     // need to retain a list of files for deletion later
                     fileList.push('file-'+ i +'.csv');
                     // file chunk to be written
