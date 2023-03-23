@@ -42,7 +42,7 @@ async function fileSplitter(processedJson) {
             if (j < processedJson.length) {
                 linesWritten++;
                 // if we've reached the chunk increment, increase the starting point to the next increment
-                if (j == startingPoint + chunkSize - 1) {
+                if (j === startingPoint + chunkSize - 1 || j === processedJson.length - 1) {
                     startingPoint = j + 1;
 
                     // file chunk to be written
